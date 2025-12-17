@@ -1,0 +1,27 @@
+<div class="sp-container">
+  <h2>Simple Sliding Puzzle</h2>
+
+  <div class="sp-stats">
+    <span>Moves: <strong>{{ moveCount }}</strong></span>
+    <span>Time: <strong class="mono">{{ formatTime(elapsedMs) }}</strong></span>
+  </div>
+
+  <div class="sp-actions">
+    <button (click)="reset()">Shuffle / Reset</button>
+  </div>
+
+  <div class="sp-board" [ngStyle]="dimensionStyle" aria-label="Simple sliding puzzle board">
+    <button
+      class="sp-tile"
+      *ngFor="let tile of tiles; let i = index"
+      [class.empty]="tile === 0"
+      [disabled]="tile === 0 || !canMove(i) || isSolved()"
+      (click)="move(i)"
+      [attr.aria-label]="tile === 0 ? 'Empty' : 'Tile ' + tile"
+    >
+      <span *ngIf="tile !== 0">{{ tile }}</span>
+    </button>
+  </div>
+
+  <p class="sp-win" *ngIf="isSolved()">Solved in {{ moveCount }} moves, {{ formatTime(elapsedMs) }}.</p>
+</div>

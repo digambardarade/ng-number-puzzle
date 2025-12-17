@@ -1,0 +1,112 @@
+.sp-container {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	align-items: center;
+	padding: 12px;
+	color: #3b2a1b;
+}
+
+/* Make heading and stats white and clearly visible */
+h2 {
+	margin: 0;
+	color: #ffffff;
+	text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+}
+
+.sp-stats {
+	display: flex;
+	gap: 16px;
+	color: #ffffff;
+}
+
+.sp-stats span {
+	background: rgba(0,0,0,0.32);
+	padding: 6px 10px;
+	border-radius: 8px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+
+.sp-stats .mono {
+	font-family: ui-monospace, Menlo, Consolas, monospace;
+	color: inherit;
+}
+
+.sp-actions {
+	display: flex;
+	gap: 8px;
+}
+
+.sp-board {
+	display: grid;
+	gap: 6px;
+	width: min(92vw, 520px);
+	height: min(92vw, 520px);
+	padding: 8px;
+	border-radius: 12px;
+	border: 1px solid #e3d8c2;
+	background:
+		linear-gradient(180deg, rgba(255,255,255,0.45), rgba(255,255,255,0) 40%),
+		linear-gradient(135deg, #f6f2e9 0%, #efe8d9 100%);
+	box-shadow: 0 6px 16px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.5);
+}
+
+.sp-tile {
+	border: 1px solid #e0d6c3;
+	border-radius: 10px;
+	background:
+		linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0) 40%),
+		linear-gradient(135deg, #fbf8f2 0%, #f2ebdd 100%);
+	font-size: clamp(14px, 5vw, 24px);
+	font-weight: 700;
+	color: #3b2a1b;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.5);
+	transition: transform 0.08s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sp-tile:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.02);
+	box-shadow: 0 6px 12px rgba(0,0,0,0.10);
+}
+
+.sp-tile.empty {
+	background:
+		linear-gradient(135deg, #f0eadb 0%, #e8dfc9 100%);
+	color: transparent;
+	border-style: dashed;
+	border-color: #d6c9ae;
+}
+
+.sp-win {
+	margin: 6px 0 0;
+	color: #2e7d32;
+}
+
+button {
+	padding: 8px 12px;
+	border-radius: 10px;
+	border: 1px solid #d6c9ae;
+	background:
+		linear-gradient(180deg, rgba(255,255,255,0.50), rgba(255,255,255,0) 40%),
+		linear-gradient(135deg, #f5efe3 0%, #eadfc9 100%);
+	color: #3b2a1b;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(255,255,255,0.5);
+	transition: transform 0.08s ease, filter 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+	transform: translateY(-1px);
+	filter: brightness(1.02);
+	box-shadow: 0 6px 12px rgba(0,0,0,0.10);
+}
+
+button:active {
+	transform: translateY(0);
+	filter: brightness(0.99);
+}

@@ -1,0 +1,87 @@
+<div class="container" [ngClass]="themeClass">
+  <div class="header">
+    <h1>Numbers Sliding Puzzle</h1>
+  </div>
+
+  <div class="content">
+    <div class="left">
+      <div class="board" [ngStyle]="dimensionStyle" aria-label="Sliding puzzle board">
+        <div class="board-overlay" *ngIf="paused || stopped" [class.is-paused]="paused" [class.is-stopped]="stopped">
+          <span class="overlay-label">{{ paused ? 'Paused' : 'Stopped' }}</span>
+        </div>
+        <button
+          class="tile"
+          *ngFor="let tile of tiles; let i = index"
+          [class.empty]="tile === 0"
+          [class.moved]="i === lastMovedIndex"
+          [disabled]="tile === 0 || !canMove(i) || isSolved() || paused || stopped"
+          (click)="move(i)"
+          [attr.aria-label]="tile === 0 ? 'Empty' : 'Tile ' + tile"
+          [attr.data-index]="i"
+        >
+          <span *ngIf="tile !== 0">{{ tile }}</span>
+        </button>
+      </div>
+
+      <div class="banner" *ngIf="isSolved() || stopped">
+        <div class="message">
+          <strong>{{ isSolved() ? 'Congrats!' : 'Well done!' }}</strong>
+          <span>
+            {{ isSolved() ? 'You solved it' : 'Game ended' }} with
+            {{ moveCount }} moves in {{ formatTime(elapsedMs) }}.
+          </span>
+          <span *ngIf="bestTimeMs !== null || bestMoves !== null">
+            Best: <span class="monospace">{{ bestTimeMs !== null ? formatTime(bestTimeMs) : '--:--:---' }}</span>
+            <ng-container *ngIf="bestMoves !== null"> · Min Moves: {{ bestMoves }}</ng-container>
+          </span>
+          <span *ngIf="newBest">New best! 🎉</span>
+        </div>
+      </div>
+    </div>
+
+    <aside class="right side-panel" aria-label="Game controls and stats">
+      <div class="panel-section info">
+        <div class="info-grid">
+          <div class="info-card">
+            <div class="info-label">Moves</div>
+            <div class="info-value stat-value">{{ moveCount }}</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Time</div>
+            <div class="info-value stat-value monospace">{{ formatTime(elapsedMs) }}</div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Size</div>
+            <div class="info-control">
+              <select class="wood-select" title="Board size" autocomplete="off" [(ngModel)]="size" (ngModelChange)="changeSize($event)" (change)="onSelectChange($event)">
+                <option [value]="3">3X3</option>
+                <option [value]="4">4X4</option>
+                <option [value]="5">5X5</option>
+              </select>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-label">Theme</div>
+            <div class="info-control">
+              <select class="wood-select" title="Theme" [(ngModel)]="theme" (ngModelChange)="changeTheme($event)" (change)="onSelectChange($event)">
+                <option value="wood">Wood</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel-section actions">
+        <div class="btn-row d-flex align-items-center">
+          <button (click)="reset()">Shuffle / Reset</button>
+          <button (click)="togglePause()" [disabled]="isSolved() || stopped">
+            {{ paused ? 'Resume' : 'Pause' }}
+          </button>
+          <button (click)="stopGame()" [disabled]="isSolved() || stopped">Stop</button>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+</div>

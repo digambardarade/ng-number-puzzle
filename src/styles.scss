@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+/* Theme variables */
+:root {
+	--wood-dark: #6e3f1a;
+	--wood: #a86b2d;
+	--wood-mid: #c0833a;
+	--wood-light: #dfb47a;
+	--text-deep: #3b2a1b;
+	/* Dark amber page theme */
+	--bg-deep: #1b1410;
+	--bg-accent: #3a2516;
+	--bg-amber: #ffb566;
+	--parchment: #f7f3e8;
+}
+
+/* Page background: subtle felt with soft vignettes */
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	background:
+		radial-gradient(120% 100% at 50% -10%, rgba(255, 181, 102, 0.06), rgba(255, 181, 102, 0) 60%),
+		radial-gradient(80% 60% at 0% 100%, rgba(0,0,0,0.35), transparent 60%),
+		radial-gradient(80% 60% at 100% 0%, rgba(0,0,0,0.35), transparent 60%),
+		linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-accent) 100%);
+	color: var(--parchment);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Make sure app fills the viewport for the background */
+app-root, .app-root, #app-root {
+	min-height: 100%;
+	display: block;
+}
