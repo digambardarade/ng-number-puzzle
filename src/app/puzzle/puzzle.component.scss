@@ -145,11 +145,9 @@
   padding: 12px;
   border-radius: 16px;
   border: 8px solid var(--wood-dark, #6e3f1a);
-  background:
-    radial-gradient(140% 90% at 15% 15%, rgba(255,255,255,0.20), transparent 60%),
-    radial-gradient(140% 90% at 85% 85%, rgba(0,0,0,0.18), transparent 60%),
-    repeating-linear-gradient(18deg, rgba(255,255,255,0.05) 0 3px, rgba(0,0,0,0.07) 3px 6px),
-    linear-gradient(90deg, var(--wood, #a86b2d), var(--wood-mid, #c0833a) 50%, var(--wood, #a86b2d));
+  /* Flatten to solid color */
+  background: none;
+  background-color: var(--wood, #a86b2d);
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,0.15),
     inset 0 -6px 12px rgba(0,0,0,0.25),
@@ -184,9 +182,8 @@
   padding: 6px 12px;
   border-radius: 999px;
   border: 2px solid rgba(0,0,0,0.15);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
-    linear-gradient(90deg, var(--wood-light, #dfb47a), var(--wood-mid, #c0833a) 50%, var(--wood-light, #dfb47a));
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   color: var(--text-deep, #3b2a1b);
   font-weight: 700;
   flex: 1 1 0;
@@ -255,10 +252,9 @@
   padding: 8px 10px;
   border-radius: 12px;
   border: 1px solid rgba(0,0,0,0.1);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-    linear-gradient(90deg, var(--wood-light, #dfb47a), #c9975a 50%, var(--wood-light, #dfb47a));
+  /* Flatten to solid color */
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   box-shadow:
     0 2px 8px rgba(0,0,0,0.18),
     inset 0 0 0 1px rgba(255,255,255,0.35);
@@ -341,10 +337,8 @@
   padding: 8px 10px;
   border-radius: 10px;
   border: 2px solid var(--wood-dark, #6e3f1a);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-    linear-gradient(90deg, var(--wood-light, #dfb47a), var(--wood-mid, #c0833a) 50%, var(--wood-light, #dfb47a));
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   color: var(--text-deep, #3b2a1b);
   box-shadow: 0 2px 8px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.35);
 }
@@ -357,11 +351,9 @@
   padding: 12px;
   border-radius: 16px;
   border: 8px solid #6e3f1a;
-  background:
-    radial-gradient(140% 90% at 15% 15%, rgba(255,255,255,0.20), transparent 60%),
-    radial-gradient(140% 90% at 85% 85%, rgba(0,0,0,0.18), transparent 60%),
-    repeating-linear-gradient(18deg, rgba(255,255,255,0.05) 0 3px, rgba(0,0,0,0.07) 3px 6px),
-    linear-gradient(90deg, #a86b2d, #c0833a 50%, #a86b2d);
+  /* Plain wood board (no gradients) */
+  background: none;
+  background-color: var(--wood, #a86b2d);
   box-shadow:
     inset 0 0 0 2px rgba(255,255,255,0.15),
     inset 0 -6px 12px rgba(0,0,0,0.25),
@@ -386,18 +378,14 @@
   }
   .side-panel {
     border-color: #1b5e20;
-    background:
-      radial-gradient(120% 100% at 50% -10%, rgba(255,255,255,0.10), rgba(255,255,255,0) 55%),
-      radial-gradient(80% 60% at 100% 0%, rgba(0,0,0,0.18), transparent 60%),
-      radial-gradient(80% 60% at 0% 100%, rgba(0,0,0,0.18), transparent 60%),
-      linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%);
+    background: none;
+    background-color: #1b5e20;
     color: #ffffff;
   }
   /* Side panel content: cards, labels, controls, buttons */
   .side-panel .info-card {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #348f37 0%, #1b5e20 100%);
+    background: none;
+    background-color: #2e7d32;
     border-color: rgba(255,255,255,0.25);
     color: #ffffff;
   }
@@ -413,9 +401,8 @@
       0 2px 8px rgba(0,0,0,0.25),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    background: none;
+    background-color: #2e7d32;
   }
   .side-panel .wood-select:focus {
     color: #000000;
@@ -430,9 +417,8 @@
       0 2px 8px rgba(0,0,0,0.25),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    background: none;
+    background-color: #2e7d32;
   }
   /* Bottom actions row (outside side panel) */
   .panel-section.actions .btn-row button {
@@ -440,16 +426,13 @@
       0 2px 8px rgba(0,0,0,0.25),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    background: none;
+    background-color: #2e7d32;
   }
-  /* Green tiles */
+  /* Green tiles (plain) */
   .tile {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 35%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-      linear-gradient(90deg, #4caf50, #2e7d32 50%, #4caf50);
+    background: none;
+    background-color: #2e7d32;
     color: #f5f7f5;
     box-shadow: 0 2px 8px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(255,255,255,0.25);
   }
@@ -457,15 +440,14 @@
     filter: brightness(1.08);
   }
 
-  /* Mobile stats pills follow green theme */
-  .mobile-stats .stat-item {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+  /* Plain solid stats pills (no gradients) */
+  .stats .stat-item {
+    background: none;
+    background-color: #2e7d32;
     color: #ffffff;
   }
-  .mobile-stats .stat-label,
-  .mobile-stats .stat-value {
+  .stats .stat-label,
+  .stats .stat-value {
     color: #ffffff;
   }
 }
@@ -482,18 +464,14 @@
   }
   .side-panel {
     border-color: #1e3a8a;
-    background:
-      radial-gradient(120% 100% at 50% -10%, rgba(255,255,255,0.10), rgba(255,255,255,0) 55%),
-      radial-gradient(80% 60% at 100% 0%, rgba(0,0,0,0.20), transparent 60%),
-      radial-gradient(80% 60% at 0% 100%, rgba(0,0,0,0.20), transparent 60%),
-      linear-gradient(135deg, #1e40af 0%, #0f245d 100%);
+    background: none;
+    background-color: #0f245d;
     color: #ffffff;
   }
   /* Side panel content: cards, labels, controls, buttons */
   .side-panel .info-card {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #2a55c7 0%, #0f245d 100%);
+    background: none;
+    background-color: #1e3a8a;
     border-color: rgba(255,255,255,0.25);
     color: #ffffff;
   }
@@ -509,9 +487,8 @@
       0 2px 8px rgba(0,0,0,0.28),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+    background: none;
+    background-color: #1e3a8a;
   }
   .side-panel .wood-select:focus {
     color: #000000;
@@ -526,9 +503,8 @@
       0 2px 8px rgba(0,0,0,0.28),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+    background: none;
+    background-color: #1e3a8a;
   }
   /* Bottom actions row (outside side panel) */
   .panel-section.actions .btn-row button {
@@ -536,16 +512,13 @@
       0 2px 8px rgba(0,0,0,0.28),
       inset 0 0 0 1px rgba(255,255,255,0.18)
     );
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+    background: none;
+    background-color: #1e3a8a;
   }
-  /* Blue tiles */
+  /* Blue tiles (plain) */
   .tile {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 35%),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.06) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-      linear-gradient(90deg, #4f7bd4, #1e40af 50%, #4f7bd4);
+    background: none;
+    background-color: #1e40af;
     color: #f3f6ff;
     box-shadow:
       0 2px 8px rgba(0,0,0,0.24),
@@ -555,15 +528,14 @@
     filter: brightness(1.08);
   }
 
-  /* Mobile stats pills follow blue theme */
-  .mobile-stats .stat-item {
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
-      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+  /* Plain solid stats pills (no gradients) */
+  .stats .stat-item {
+    background: none;
+    background-color: #1e40af;
     color: #ffffff;
   }
-  .mobile-stats .stat-label,
-  .mobile-stats .stat-value {
+  .stats .stat-label,
+  .stats .stat-value {
     color: #ffffff;
   }
 }
@@ -627,10 +599,8 @@
 .tile {
   border: none;
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.3), rgba(255,255,255,0) 35%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-    linear-gradient(90deg, #dfb47a, #c9975a 50%, #dfb47a);
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   box-shadow:
     0 2px 8px rgba(0,0,0,0.18),
     inset 0 0 0 1px rgba(255,255,255,0.35);
@@ -716,9 +686,8 @@ button {
   padding: 8px 12px;
   border-radius: 10px;
   border: 2px solid var(--wood-dark, #6e3f1a);
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
-    linear-gradient(90deg, var(--wood-light, #dfb47a), var(--wood-mid, #c0833a) 50%, var(--wood-light, #dfb47a));
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   color: var(--text-deep, #3b2a1b);
   cursor: pointer;
   box-shadow:
@@ -739,10 +708,9 @@ button:disabled {
   gap: 8px;
   padding: 8px 12px;
   border-radius: 12px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
-    repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0 2px, rgba(0,0,0,0.08) 2px 4px),
-    linear-gradient(90deg, var(--wood-light, #dfb47a), #c9975a 50%, var(--wood-light, #dfb47a));
+  /* Plain, solid background across devices */
+  background: none;
+  background-color: var(--wood-light, #dfb47a);
   box-shadow:
     0 2px 8px rgba(0,0,0,0.18),
     inset 0 0 0 1px rgba(255,255,255,0.35);
