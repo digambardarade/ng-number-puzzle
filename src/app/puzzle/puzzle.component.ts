@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./puzzle.component.scss']
 })
 export class PuzzleComponent implements OnInit {
-  size = 5;
+  // Toggle all localStorage usage. Set to true to enable persistence/theme/best saves.
+  private readonly USE_LOCAL_STORAGE = false;
+  size = 3;
   theme: 'wood' | 'green' | 'blue' = 'wood';
   tiles: number[] = [];
   moveCount = 0;
@@ -15,6 +17,7 @@ export class PuzzleComponent implements OnInit {
   timerId: any = null;
   paused = false;
   stopped = false;
+  showBanner = false; // show congrats/end banner only after solve or explicit stop
   lastMovedIndex: number | null = null;
   bestTimeMs: number | null = null;
   bestMoves: number | null = null;
@@ -22,7 +25,12 @@ export class PuzzleComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTheme();
-    this.reset();
+    // Try to load existing game; if none, start ordered without shuffling
+    if (!this.loadGameState()) {
+      this.reset(false);
+    }
+    // Never show banner on initial load, even if solved/stopped state was restored
+    this.showBanner = false;
     this.loadBest();
   }
 
@@ -33,7 +41,7 @@ export class PuzzleComponent implements OnInit {
     };
   }
 
-  reset(): void {
+  reset(shuffle: boolean = true): void {
     this.tiles = Array.from({ length: this.size * this.size - 1 }, (_, i) => i + 1);
     this.tiles.push(0);
     this.moveCount = 0;
@@ -42,9 +50,13 @@ export class PuzzleComponent implements OnInit {
     this.startTime = null;
     this.paused = false;
     this.stopped = false;
+    this.showBanner = false;
     this.lastMovedIndex = null;
     this.newBest = false;
-    this.shuffleSolvable();
+    if (shuffle) {
+      this.shuffleSolvable();
+    }
+    this.saveGameState();
   }
 
   shuffleSolvable(): void {
@@ -103,7 +115,9 @@ export class PuzzleComponent implements OnInit {
     if (this.isSolved()) {
       this.stopTimer();
       this.updateBest();
+      this.showBanner = true;
     }
+    this.saveGameState();
   }
 
   isSolved(): boolean {
@@ -154,12 +168,15 @@ export class PuzzleComponent implements OnInit {
     } else {
       this.resumeTimer();
     }
+    this.saveGameState();
   }
 
   stopGame(): void {
     if (this.isSolved() || this.stopped) return;
     this.stopped = true;
     this.pauseTimer();
+    this.showBanner = true;
+    this.saveGameState();
   }
 
   get themeClass(): string {
@@ -171,10 +188,12 @@ export class PuzzleComponent implements OnInit {
     if (v === 'wood' || v === 'green' || v === 'blue') {
       this.theme = v as any;
       this.saveTheme();
+      this.saveGameState();
     }
   }
 
   private loadTheme(): void {
+    if (!this.USE_LOCAL_STORAGE) return; // localStorage disabled
     try {
       const v = localStorage.getItem('ngp_theme');
       if (v === 'wood' || v === 'green' || v === 'blue') {
@@ -184,6 +203,7 @@ export class PuzzleComponent implements OnInit {
   }
 
   private saveTheme(): void {
+    if (!this.USE_LOCAL_STORAGE) return; // localStorage disabled
     try { localStorage.setItem('ngp_theme', this.theme); } catch {}
   }
 
@@ -201,6 +221,7 @@ export class PuzzleComponent implements OnInit {
   }
 
   loadBest(): void {
+    if (!this.USE_LOCAL_STORAGE) { this.bestTimeMs = null; this.bestMoves = null; return; }
     try {
       const raw = localStorage.getItem(this.bestKey());
       if (raw) {
@@ -233,10 +254,13 @@ export class PuzzleComponent implements OnInit {
     }
     if (improved) {
       this.newBest = true;
-      try {
-        localStorage.setItem(this.bestKey(), JSON.stringify({ time: this.bestTimeMs, moves: this.bestMoves }));
-      } catch {}
+      if (this.USE_LOCAL_STORAGE) {
+        try {
+          localStorage.setItem(this.bestKey(), JSON.stringify({ time: this.bestTimeMs, moves: this.bestMoves }));
+        } catch {}
+      }
     }
+    this.saveGameState();
   }
 
   formatTime(ms: number): string {
@@ -254,6 +278,61 @@ export class PuzzleComponent implements OnInit {
     // Blur to remove focus so it returns to themed (white) text immediately
     if (el && typeof el.blur === 'function') {
       el.blur();
+    }
+  }
+
+  private stateKey(): string {
+    return 'ngp_state';
+  }
+
+  private saveGameState(): void {
+    if (!this.USE_LOCAL_STORAGE) return; // localStorage disabled
+    try {
+      const running = this.startTime !== null && !this.paused && !this.stopped && !this.isSolved();
+      const state = {
+        size: this.size,
+        tiles: this.tiles,
+        moveCount: this.moveCount,
+        elapsedMs: this.elapsedMs,
+        paused: this.paused,
+        stopped: this.stopped,
+        running,
+        theme: this.theme,
+        ts: Date.now()
+      };
+      localStorage.setItem(this.stateKey(), JSON.stringify(state));
+    } catch {}
+  }
+
+  private loadGameState(): boolean {
+    if (!this.USE_LOCAL_STORAGE) return false; // localStorage disabled
+    try {
+      const raw = localStorage.getItem(this.stateKey());
+      if (!raw) return false;
+      const s = JSON.parse(raw);
+      if (!s || typeof s !== 'object') return false;
+      const size = Number(s.size);
+      if (![3,4,5].includes(size)) return false;
+      const tiles: number[] = Array.isArray(s.tiles) ? s.tiles.slice() : [];
+      if (tiles.length !== size * size) return false;
+
+      this.size = size;
+      this.tiles = tiles;
+      this.moveCount = typeof s.moveCount === 'number' ? s.moveCount : 0;
+      this.elapsedMs = typeof s.elapsedMs === 'number' ? s.elapsedMs : 0;
+      this.paused = !!s.paused;
+      this.stopped = !!s.stopped;
+      const theme = (s.theme || '').toLowerCase();
+      if (theme === 'wood' || theme === 'green' || theme === 'blue') {
+        this.theme = theme as any;
+      }
+      this.startTime = null;
+      if (s.running && !this.paused && !this.stopped && !this.isSolved()) {
+        this.resumeTimer();
+      }
+      return true;
+    } catch {
+      return false;
     }
   }
 }

@@ -23,7 +23,7 @@
         </button>
       </div>
 
-      <div class="banner" *ngIf="isSolved() || stopped">
+      <div class="banner" *ngIf="showBanner">
         <div class="message">
           <strong>{{ isSolved() ? 'Congrats!' : 'Well done!' }}</strong>
           <span>
