@@ -456,6 +456,18 @@
   .tile:not(.empty):hover {
     filter: brightness(1.08);
   }
+
+  /* Mobile stats pills follow green theme */
+  .mobile-stats .stat-item {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
+      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    color: #ffffff;
+  }
+  .mobile-stats .stat-label,
+  .mobile-stats .stat-value {
+    color: #ffffff;
+  }
 }
 
 .theme-blue {
@@ -541,6 +553,18 @@
   }
   .tile:not(.empty):hover {
     filter: brightness(1.08);
+  }
+
+  /* Mobile stats pills follow blue theme */
+  .mobile-stats .stat-item {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0) 40%),
+      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+    color: #ffffff;
+  }
+  .mobile-stats .stat-label,
+  .mobile-stats .stat-value {
+    color: #ffffff;
   }
 }
 
