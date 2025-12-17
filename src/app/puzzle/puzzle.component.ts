@@ -7,9 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PuzzleComponent implements OnInit {
   // Toggle all localStorage usage. Set to true to enable persistence/theme/best saves.
-  private readonly USE_LOCAL_STORAGE = false;
+  private readonly USE_LOCAL_STORAGE = true;
   size = 3;
   theme: 'wood' | 'green' | 'blue' = 'wood';
+  playerName: string = '';
   tiles: number[] = [];
   moveCount = 0;
   startTime: number | null = null;
@@ -22,9 +23,20 @@ export class PuzzleComponent implements OnInit {
   bestTimeMs: number | null = null;
   bestMoves: number | null = null;
   newBest = false;
+  dimensionStyle: { [key: string]: string } = {
+    'grid-template-columns': 'repeat(3, 1fr)',
+    'grid-template-rows': 'repeat(3, 1fr)'
+  };
+  leaderboard: Array<{ time: number; moves: number; ts: number }> = [];
+  private readonly LEADERBOARD_LIMIT = 5;
 
+  activeTab: 'stats' | 'leaderboard' = 'stats';
   ngOnInit(): void {
     this.loadTheme();
+    this.loadPlayer();
+    if (!this.playerName) {
+      this.askPlayerName();
+    }
     // Try to load existing game; if none, start ordered without shuffling
     if (!this.loadGameState()) {
       this.reset(false);
@@ -32,10 +44,11 @@ export class PuzzleComponent implements OnInit {
     // Never show banner on initial load, even if solved/stopped state was restored
     this.showBanner = false;
     this.loadBest();
+    this.loadLeaderboard();
   }
 
-  get dimensionStyle() {
-    return {
+  private updateDimensionStyle(): void {
+    this.dimensionStyle = {
       'grid-template-columns': `repeat(${this.size}, 1fr)`,
       'grid-template-rows': `repeat(${this.size}, 1fr)`
     };
@@ -53,6 +66,7 @@ export class PuzzleComponent implements OnInit {
     this.showBanner = false;
     this.lastMovedIndex = null;
     this.newBest = false;
+    this.updateDimensionStyle();
     if (shuffle) {
       this.shuffleSolvable();
     }
@@ -114,6 +128,7 @@ export class PuzzleComponent implements OnInit {
     setTimeout(() => { this.lastMovedIndex = null; }, 180);
     if (this.isSolved()) {
       this.stopTimer();
+      this.addToLeaderboard(this.elapsedMs, this.moveCount);
       this.updateBest();
       this.showBanner = true;
     }
@@ -179,6 +194,10 @@ export class PuzzleComponent implements OnInit {
     this.saveGameState();
   }
 
+  setTab(tab: 'stats' | 'leaderboard'): void {
+    this.activeTab = tab;
+  }
+
   get themeClass(): string {
     return `theme-${this.theme}`;
   }
@@ -190,6 +209,32 @@ export class PuzzleComponent implements OnInit {
       this.saveTheme();
       this.saveGameState();
     }
+  }
+
+  askPlayerName(): void {
+    const name = typeof window !== 'undefined' ? window.prompt('Enter your name', this.playerName || '') : '';
+    const trimmed = (name || '').trim();
+    if (trimmed) {
+      this.playerName = trimmed;
+      this.savePlayer();
+      this.loadBest();
+      this.loadLeaderboard();
+      this.saveGameState();
+    } else if (!this.playerName) {
+      this.playerName = 'Guest';
+      this.savePlayer();
+      this.loadBest();
+      this.loadLeaderboard();
+      this.saveGameState();
+    }
+  }
+
+  onPlayerNameInput(val: string): void {
+    const v = (val || '').trim();
+    this.playerName = v || 'Guest';
+    this.savePlayer();
+    this.loadBest();
+    this.saveGameState();
   }
 
   private loadTheme(): void {
@@ -212,12 +257,15 @@ export class PuzzleComponent implements OnInit {
     if (![3,4,5].includes(n)) return;
     if (n === this.size) return;
     this.size = n;
+    this.updateDimensionStyle();
     this.reset();
     this.loadBest();
+    this.loadLeaderboard();
   }
 
   private bestKey(): string {
-    return `ngpuzzle_best_${this.size}`;
+    const who = (this.playerName || 'Guest').toLowerCase().replace(/\s+/g, '_').slice(0, 50);
+    return `ngpuzzle_best_${who}_${this.size}`;
   }
 
   loadBest(): void {
@@ -298,6 +346,7 @@ export class PuzzleComponent implements OnInit {
         stopped: this.stopped,
         running,
         theme: this.theme,
+        player: this.playerName,
         ts: Date.now()
       };
       localStorage.setItem(this.stateKey(), JSON.stringify(state));
@@ -317,6 +366,7 @@ export class PuzzleComponent implements OnInit {
       if (tiles.length !== size * size) return false;
 
       this.size = size;
+      this.updateDimensionStyle();
       this.tiles = tiles;
       this.moveCount = typeof s.moveCount === 'number' ? s.moveCount : 0;
       this.elapsedMs = typeof s.elapsedMs === 'number' ? s.elapsedMs : 0;
@@ -326,6 +376,9 @@ export class PuzzleComponent implements OnInit {
       if (theme === 'wood' || theme === 'green' || theme === 'blue') {
         this.theme = theme as any;
       }
+      if (typeof s.player === 'string' && s.player.trim()) {
+        this.playerName = s.player.trim();
+      }
       this.startTime = null;
       if (s.running && !this.paused && !this.stopped && !this.isSolved()) {
         this.resumeTimer();
@@ -334,5 +387,55 @@ export class PuzzleComponent implements OnInit {
     } catch {
       return false;
     }
+  }
+
+  private savePlayer(): void {
+    if (!this.USE_LOCAL_STORAGE) return;
+    try { localStorage.setItem('ngp_player_name', this.playerName); } catch {}
+  }
+
+  private loadPlayer(): void {
+    if (!this.USE_LOCAL_STORAGE) return;
+    try {
+      const v = localStorage.getItem('ngp_player_name');
+      if (v && v.trim()) this.playerName = v.trim();
+    } catch {}
+  }
+
+  private leaderboardKey(): string {
+    const who = (this.playerName || 'Guest').toLowerCase().replace(/\s+/g, '_').slice(0, 50);
+    return `ngpuzzle_lb_${who}_${this.size}`;
+  }
+
+  private loadLeaderboard(): void {
+    if (!this.USE_LOCAL_STORAGE) { this.leaderboard = []; return; }
+    try {
+      const raw = localStorage.getItem(this.leaderboardKey());
+      const arr = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(arr)) {
+        this.leaderboard = arr
+          .filter(e => e && typeof e.time === 'number' && typeof e.moves === 'number' && typeof e.ts === 'number')
+          .sort((a, b) => (a.time - b.time) || (a.moves - b.moves))
+          .slice(0, this.LEADERBOARD_LIMIT);
+      } else {
+        this.leaderboard = [];
+      }
+    } catch { this.leaderboard = []; }
+  }
+
+  private saveLeaderboard(): void {
+    if (!this.USE_LOCAL_STORAGE) return;
+    try { localStorage.setItem(this.leaderboardKey(), JSON.stringify(this.leaderboard)); } catch {}
+  }
+
+  private addToLeaderboard(time: number, moves: number): void {
+    const entry = { time, moves, ts: Date.now() };
+    this.loadLeaderboard();
+    this.leaderboard.push(entry);
+    this.leaderboard.sort((a, b) => (a.time - b.time) || (a.moves - b.moves));
+    if (this.leaderboard.length > this.LEADERBOARD_LIMIT) {
+      this.leaderboard.length = this.LEADERBOARD_LIMIT;
+    }
+    this.saveLeaderboard();
   }
 }

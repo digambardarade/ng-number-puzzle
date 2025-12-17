@@ -31,6 +31,13 @@
     0 6px 16px rgba(0,0,0,0.35);
 }
 
+/* Reusable helpers (do not change output look; only DRY declarations) */
+@mixin themed-surface($border-color, $text-color, $shadow...) {
+  border-color: $border-color;
+  color: $text-color;
+  box-shadow: $shadow;
+}
+
 .stats {
   display: flex;
   gap: 16px;
@@ -142,6 +149,57 @@
   place-items: center;
 }
 
+.panel-tabs {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: space-between;
+}
+.panel-tabs button[role="tab"] {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,0.15);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0) 40%),
+    linear-gradient(90deg, var(--wood-light, #dfb47a), var(--wood-mid, #c0833a) 50%, var(--wood-light, #dfb47a));
+  color: var(--text-deep, #3b2a1b);
+  font-weight: 700;
+  flex: 1 1 0;
+  text-align: center;
+}
+.panel-tabs button.active[role="tab"] {
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5), 0 2px 10px rgba(0,0,0,0.18);
+}
+
+/* Keep action buttons visible at the bottom of the side panel */
+.side-panel .panel-section.actions {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: inherit; /* continue the themed panel background */
+  z-index: 1;
+  box-shadow: 0 -6px 12px rgba(0,0,0,0.15);
+}
+
+/* Ensure below-board actions row stretches and buttons are equal width */
+.panel-section.actions {
+  display: block; /* override generic .actions flex */
+  width: 100%;
+  /* Match the board's max width and center */
+  max-width: min(100%, calc(100dvh - var(--v-chrome)), 100vw - 24px);
+  margin-inline: auto;
+}
+.panel-section.actions .btn-row {
+  width: 100%;
+}
+.panel-section.actions .btn-row button {
+  flex: 1 1 0;
+}
+
 .best-stats {
   margin-top: 4px;
 }
@@ -158,6 +216,9 @@
   .info .info-grid {
     grid-template-columns: 1fr 1fr;
     align-items: stretch;
+  }
+  .info .info-grid .player-card {
+    grid-column: 1 / -1;
   }
 }
 
@@ -177,6 +238,8 @@
     0 2px 8px rgba(0,0,0,0.18),
     inset 0 0 0 1px rgba(255,255,255,0.35);
 }
+
+/* reverted single-row player-card overrides */
 
 .info-label {
   font-weight: 700;
@@ -204,6 +267,50 @@
   color: var(--text-deep, #3b2a1b);
 }
 
+.player-row {
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  line-height: 1.1;
+}
+
+.leaderboard {
+  padding-top: 6px;
+}
+.panel-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.lb {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.lb li {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.15), rgba(255,255,255,0) 40%),
+    linear-gradient(90deg, var(--wood-light, #dfb47a), var(--wood-mid, #c0833a) 50%, var(--wood-light, #dfb47a));
+  color: var(--text-deep, #3b2a1b);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12), inset 0 0 0 1px rgba(255,255,255,0.25);
+}
+.lb .rank { font-weight: 800; }
+.lb .time { font-weight: 800; }
+.lb .moves { opacity: 0.9; }
+.lb .date { opacity: 0.8; font-size: 0.9em; }
+.lb .muted { text-align: center; opacity: 0.7; background: none; box-shadow: none; }
 .wood-select {
   width: 100%;
   padding: 8px 10px;
@@ -216,7 +323,6 @@
   color: var(--text-deep, #3b2a1b);
   box-shadow: 0 2px 8px rgba(0,0,0,0.18), inset 0 0 0 1px rgba(255,255,255,0.35);
 }
-
 .board {
   display: grid;
   gap: 8px;
@@ -276,15 +382,15 @@
   .side-panel .stat-value {
     color: #ffffff;
   }
-  .side-panel .wood-select {
-    border-color: #124116;
+  .side-panel .wood-select,
+  .side-panel .btn-sm {
+    @include themed-surface(#124116, #ffffff,
+      0 2px 8px rgba(0,0,0,0.25),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
     background:
       linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
       linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
-    color: #ffffff;
-    box-shadow:
-      0 2px 8px rgba(0,0,0,0.25),
-      inset 0 0 0 1px rgba(255,255,255,0.18);
   }
   .side-panel .wood-select:focus {
     color: #000000;
@@ -295,14 +401,13 @@
   }
   .side-panel .actions .btn-row button,
   .side-panel button {
-    border-color: #124116;
+    @include themed-surface(#124116, #ffffff,
+      0 2px 8px rgba(0,0,0,0.25),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
     background:
       linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
       linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
-    color: #ffffff;
-    box-shadow:
-      0 2px 8px rgba(0,0,0,0.25),
-      inset 0 0 0 1px rgba(255,255,255,0.18);
   }
   /* Green tiles */
   .tile {
@@ -351,15 +456,15 @@
   .side-panel .stat-value {
     color: #ffffff;
   }
-  .side-panel .wood-select {
-    border-color: #0c1b4d;
+  .side-panel .wood-select,
+  .side-panel .btn-sm {
+    @include themed-surface(#0c1b4d, #ffffff,
+      0 2px 8px rgba(0,0,0,0.28),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
     background:
       linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
       linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
-    color: #ffffff;
-    box-shadow:
-      0 2px 8px rgba(0,0,0,0.28),
-      inset 0 0 0 1px rgba(255,255,255,0.18);
   }
   .side-panel .wood-select:focus {
     color: #000000;
@@ -370,14 +475,13 @@
   }
   .side-panel .actions .btn-row button,
   .side-panel button {
-    border-color: #0c1b4d;
+    @include themed-surface(#0c1b4d, #ffffff,
+      0 2px 8px rgba(0,0,0,0.28),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
     background:
       linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
       linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
-    color: #ffffff;
-    box-shadow:
-      0 2px 8px rgba(0,0,0,0.28),
-      inset 0 0 0 1px rgba(255,255,255,0.18);
   }
   /* Blue tiles */
   .tile {

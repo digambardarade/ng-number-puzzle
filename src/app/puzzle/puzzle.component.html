@@ -5,16 +5,27 @@
 
   <div class="content" mt-5>
     <div class="left">
-      <div class="board" [ngStyle]="dimensionStyle" aria-label="Sliding puzzle board">
-        <div class="board-overlay" *ngIf="paused || stopped" [class.is-paused]="paused" [class.is-stopped]="stopped">
-          <span class="overlay-label">{{ paused ? 'Paused' : 'Stopped' }}</span>
+      <div
+        class="board"
+        [ngStyle]="dimensionStyle"
+        aria-label="Sliding puzzle board"
+      >
+        <div
+          class="board-overlay"
+          *ngIf="paused || stopped"
+          [class.is-paused]="paused"
+          [class.is-stopped]="stopped"
+        >
+          <span class="overlay-label">{{ paused ? "Paused" : "Stopped" }}</span>
         </div>
         <button
           class="tile"
           *ngFor="let tile of tiles; let i = index"
           [class.empty]="tile === 0"
           [class.moved]="i === lastMovedIndex"
-          [disabled]="tile === 0 || !canMove(i) || isSolved() || paused || stopped"
+          [disabled]="
+            tile === 0 || !canMove(i) || isSolved() || paused || stopped
+          "
           (click)="move(i)"
           [attr.aria-label]="tile === 0 ? 'Empty' : 'Tile ' + tile"
           [attr.data-index]="i"
@@ -23,37 +34,91 @@
         </button>
       </div>
 
-      <div class="banner" *ngIf="showBanner">
-        <div class="message">
-          <strong>{{ isSolved() ? 'Congrats!' : 'Well done!' }}</strong>
-          <span>
-            {{ isSolved() ? 'You solved it' : 'Game ended' }} with
-            {{ moveCount }} moves in {{ formatTime(elapsedMs) }}.
-          </span>
-          <span *ngIf="bestTimeMs !== null || bestMoves !== null">
-            Best: <span class="monospace">{{ bestTimeMs !== null ? formatTime(bestTimeMs) : '--:--:---' }}</span>
-            <ng-container *ngIf="bestMoves !== null"> · Min Moves: {{ bestMoves }}</ng-container>
-          </span>
-          <span *ngIf="newBest">New best! 🎉</span>
+      <div class="panel-section actions">
+        <div class="btn-row d-flex align-items-center">
+          <button (click)="reset()">Shuffle / Reset</button>
+          <button (click)="togglePause()" [disabled]="isSolved() || stopped">
+            {{ paused ? "Resume" : "Pause" }}
+          </button>
+          <button (click)="stopGame()" [disabled]="isSolved() || stopped">
+            Stop
+          </button>
         </div>
       </div>
     </div>
 
     <aside class="right side-panel" aria-label="Game controls and stats">
-      <div class="panel-section info">
+      <div class="banner" *ngIf="showBanner">
+        <div class="message">
+          <strong>{{ isSolved() ? "Congrats!" : "Well done!" }}</strong>
+          <span>
+            {{ isSolved() ? "You solved it" : "Game ended" }} with
+            {{ moveCount }} moves in {{ formatTime(elapsedMs) }}.
+          </span>
+          <span *ngIf="bestTimeMs !== null || bestMoves !== null">
+            Best:
+            <span class="monospace">{{
+              bestTimeMs !== null ? formatTime(bestTimeMs) : "--:--:---"
+            }}</span>
+            <ng-container *ngIf="bestMoves !== null">
+              · Min Moves: {{ bestMoves }}</ng-container
+            >
+          </span>
+          <span *ngIf="newBest">New best! 🎉</span>
+        </div>
+      </div>
+      <div class="panel-tabs" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeTab === 'stats'"
+          [class.active]="activeTab === 'stats'"
+          (click)="setTab('stats')"
+        >
+          Stats
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="activeTab === 'leaderboard'"
+          [class.active]="activeTab === 'leaderboard'"
+          (click)="setTab('leaderboard')"
+        >
+          Leaderboard
+        </button>
+      </div>
+      <div class="panel-section info" *ngIf="activeTab === 'stats'">
         <div class="info-grid">
+          <div class="info-card player-card">
+            <div class="info-label">Player</div>
+            <div class="info-control player-row">
+              <span class="stat-value">{{ playerName || "Guest" }}</span>
+              <button type="button" class="btn-sm" (click)="askPlayerName()">
+                Change
+              </button>
+            </div>
+          </div>
           <div class="info-card">
             <div class="info-label">Moves</div>
             <div class="info-value stat-value">{{ moveCount }}</div>
           </div>
           <div class="info-card">
             <div class="info-label">Time</div>
-            <div class="info-value stat-value monospace">{{ formatTime(elapsedMs) }}</div>
+            <div class="info-value stat-value monospace">
+              {{ formatTime(elapsedMs) }}
+            </div>
           </div>
           <div class="info-card">
             <div class="info-label">Size</div>
             <div class="info-control">
-              <select class="wood-select" title="Board size" autocomplete="off" [(ngModel)]="size" (ngModelChange)="changeSize($event)" (change)="onSelectChange($event)">
+              <select
+                class="wood-select"
+                title="Board size"
+                autocomplete="off"
+                [(ngModel)]="size"
+                (ngModelChange)="changeSize($event)"
+                (change)="onSelectChange($event)"
+              >
                 <option [value]="3">3X3</option>
                 <option [value]="4">4X4</option>
                 <option [value]="5">5X5</option>
@@ -63,7 +128,13 @@
           <div class="info-card">
             <div class="info-label">Theme</div>
             <div class="info-control">
-              <select class="wood-select" title="Theme" [(ngModel)]="theme" (ngModelChange)="changeTheme($event)" (change)="onSelectChange($event)">
+              <select
+                class="wood-select"
+                title="Theme"
+                [(ngModel)]="theme"
+                (ngModelChange)="changeTheme($event)"
+                (change)="onSelectChange($event)"
+              >
                 <option value="wood">Wood</option>
                 <option value="green">Green</option>
                 <option value="blue">Blue</option>
@@ -72,16 +143,26 @@
           </div>
         </div>
       </div>
-      <div class="panel-section actions">
-        <div class="btn-row d-flex align-items-center">
-          <button (click)="reset()">Shuffle / Reset</button>
-          <button (click)="togglePause()" [disabled]="isSolved() || stopped">
-            {{ paused ? 'Resume' : 'Pause' }}
-          </button>
-          <button (click)="stopGame()" [disabled]="isSolved() || stopped">Stop</button>
+      <div
+        class="panel-section leaderboard"
+        aria-label="Leaderboard"
+        *ngIf="activeTab === 'leaderboard'"
+      >
+        <div class="panel-title">
+          Leaderboard ({{ playerName || "Guest" }} · {{ size }}x{{ size }})
         </div>
+        <ol class="lb">
+          <li *ngFor="let e of leaderboard; let i = index">
+            <span class="rank">#{{ i + 1 }}</span>
+            <span class="time monospace">{{ formatTime(e.time) }}</span>
+            <span class="moves">{{ e.moves }} moves</span>
+            <span class="date">{{ e.ts | date : "shortDate" }}</span>
+          </li>
+          <li *ngIf="!leaderboard || leaderboard.length === 0" class="muted">
+            No records yet.
+          </li>
+        </ol>
       </div>
-
     </aside>
   </div>
 </div>
