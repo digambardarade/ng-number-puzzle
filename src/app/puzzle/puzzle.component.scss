@@ -409,6 +409,16 @@
       linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
       linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
   }
+  /* Bottom actions row (outside side panel) */
+  .panel-section.actions .btn-row button {
+    @include themed-surface(#124116, #ffffff,
+      0 2px 8px rgba(0,0,0,0.25),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
+      linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+  }
   /* Green tiles */
   .tile {
     background:
@@ -475,6 +485,16 @@
   }
   .side-panel .actions .btn-row button,
   .side-panel button {
+    @include themed-surface(#0c1b4d, #ffffff,
+      0 2px 8px rgba(0,0,0,0.28),
+      inset 0 0 0 1px rgba(255,255,255,0.18)
+    );
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0) 40%),
+      linear-gradient(135deg, #4f7bd4 0%, #1e3a8a 100%);
+  }
+  /* Bottom actions row (outside side panel) */
+  .panel-section.actions .btn-row button {
     @include themed-surface(#0c1b4d, #ffffff,
       0 2px 8px rgba(0,0,0,0.28),
       inset 0 0 0 1px rgba(255,255,255,0.18)
