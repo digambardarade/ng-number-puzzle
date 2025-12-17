@@ -1,9 +1,9 @@
 <div class="container" [ngClass]="themeClass">
   <div class="header">
-    <h1>Numbers Sliding Puzzle</h1>
+    <h3>Numbers Sliding Puzzle</h3>
   </div>
 
-  <div class="content">
+  <div class="content" mt-5>
     <div class="left">
       <div class="board" [ngStyle]="dimensionStyle" aria-label="Sliding puzzle board">
         <div class="board-overlay" *ngIf="paused || stopped" [class.is-paused]="paused" [class.is-stopped]="stopped">

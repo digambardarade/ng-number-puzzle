@@ -19,6 +19,7 @@ html, body {
 
 body {
 	margin: 0;
+	box-sizing: border-box;
 	background:
 		radial-gradient(120% 100% at 50% -10%, rgba(255, 181, 102, 0.06), rgba(255, 181, 102, 0) 60%),
 		radial-gradient(80% 60% at 0% 100%, rgba(0,0,0,0.35), transparent 60%),
@@ -27,6 +28,11 @@ body {
 	color: var(--parchment);
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure all elements size predictably */
+*, *::before, *::after {
+	box-sizing: inherit;
 }
 
 /* Make sure app fills the viewport for the background */
