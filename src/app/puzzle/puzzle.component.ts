@@ -9,7 +9,7 @@ export class PuzzleComponent implements OnInit {
   // Toggle all localStorage usage. Set to true to enable persistence/theme/best saves.
   private readonly USE_LOCAL_STORAGE = true;
   size = 3;
-  theme: 'wood' | 'green' | 'blue' = 'wood';
+  theme: 'wood' | 'green' | 'blue' | 'dark' | 'gray' = 'wood';
   playerName: string = '';
   tiles: number[] = [];
   moveCount = 0;
@@ -45,6 +45,7 @@ export class PuzzleComponent implements OnInit {
     this.showBanner = false;
     this.loadBest();
     this.loadLeaderboard();
+    this.applyBodyTheme();
   }
 
   private updateDimensionStyle(): void {
@@ -204,10 +205,11 @@ export class PuzzleComponent implements OnInit {
 
   changeTheme(val: string): void {
     const v = (val || '').toLowerCase();
-    if (v === 'wood' || v === 'green' || v === 'blue') {
+    if (v === 'wood' || v === 'green' || v === 'blue' || v === 'dark' || v === 'gray') {
       this.theme = v as any;
       this.saveTheme();
       this.saveGameState();
+      this.applyBodyTheme();
     }
   }
 
@@ -241,7 +243,7 @@ export class PuzzleComponent implements OnInit {
     if (!this.USE_LOCAL_STORAGE) return; // localStorage disabled
     try {
       const v = localStorage.getItem('ngp_theme');
-      if (v === 'wood' || v === 'green' || v === 'blue') {
+      if (v === 'wood' || v === 'green' || v === 'blue' || v === 'dark' || v === 'gray') {
         this.theme = v as any;
       }
     } catch {}
@@ -373,7 +375,7 @@ export class PuzzleComponent implements OnInit {
       this.paused = !!s.paused;
       this.stopped = !!s.stopped;
       const theme = (s.theme || '').toLowerCase();
-      if (theme === 'wood' || theme === 'green' || theme === 'blue') {
+      if (theme === 'wood' || theme === 'green' || theme === 'blue' || theme === 'dark' || theme === 'gray') {
         this.theme = theme as any;
       }
       if (typeof s.player === 'string' && s.player.trim()) {
@@ -383,10 +385,23 @@ export class PuzzleComponent implements OnInit {
       if (s.running && !this.paused && !this.stopped && !this.isSolved()) {
         this.resumeTimer();
       }
+      this.applyBodyTheme();
       return true;
     } catch {
       return false;
     }
+  }
+
+  private applyBodyTheme(): void {
+    try {
+      if (typeof document === 'undefined') return;
+      const val = this.theme === 'dark' ? 'dark' : (this.theme === 'gray' ? 'gray' : '');
+      if (val) {
+        document.body.setAttribute('data-theme', val);
+      } else {
+        document.body.removeAttribute('data-theme');
+      }
+    } catch {}
   }
 
   private savePlayer(): void {

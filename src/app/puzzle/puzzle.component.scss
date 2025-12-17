@@ -540,6 +540,200 @@
   }
 }
 
+.theme-dark {
+  /* Dark Gray board & panel */
+  .board {
+    border-color: #3a3a3a;
+    background: none;
+    background-color: #2f2f2f;
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.06),
+      inset 0 -6px 12px rgba(0,0,0,0.35),
+      0 14px 30px rgba(0,0,0,0.35);
+  }
+  .side-panel {
+    border-color: #3a3a3a;
+    background: none;
+    background-color: #2b2b2b;
+    color: #eaeaea;
+  }
+  /* Side panel content */
+  .side-panel .info-card {
+    background: none;
+    background-color: #3a3a3a;
+    border-color: rgba(255,255,255,0.12);
+    color: #eaeaea;
+  }
+  .side-panel .info-label,
+  .side-panel .setting-label,
+  .side-panel .stat-label,
+  .side-panel .stat-value {
+    color: #eaeaea;
+  }
+  .side-panel .wood-select,
+  .side-panel .btn-sm {
+    @include themed-surface(#2d2d2d, #f0f0f0,
+      0 2px 8px rgba(0,0,0,0.35),
+      inset 0 0 0 1px rgba(255,255,255,0.10)
+    );
+    background: none;
+    background-color: #3a3a3a;
+  }
+  .side-panel .wood-select:focus {
+    color: #111111;
+  }
+  .side-panel .wood-select option {
+    color: #111111;
+    background-color: #ffffff;
+  }
+  .side-panel .actions .btn-row button,
+  .side-panel button {
+    @include themed-surface(#2d2d2d, #f0f0f0,
+      0 2px 8px rgba(0,0,0,0.35),
+      inset 0 0 0 1px rgba(255,255,255,0.10)
+    );
+    background: none;
+    background-color: #3a3a3a;
+  }
+  /* Bottom actions row (outside side panel) */
+  .panel-section.actions .btn-row button {
+    @include themed-surface(#2d2d2d, #f0f0f0,
+      0 2px 8px rgba(0,0,0,0.35),
+      inset 0 0 0 1px rgba(255,255,255,0.10)
+    );
+    background: none;
+    background-color: #3a3a3a;
+  }
+  /* Dark tiles */
+  .tile {
+    background: none;
+    background-color: #3f3f3f;
+    color: #f3f3f3;
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.28),
+      inset 0 0 0 1px rgba(255,255,255,0.10);
+  }
+  .tile:not(.empty):hover {
+    filter: brightness(1.08);
+  }
+  .tile.empty {
+    background: #2a2a2a;
+    box-shadow:
+      inset 9px 9px 18px rgba(0,0,0,0.55),
+      inset -7px -7px 14px rgba(255,255,255,0.08),
+      inset 0 0 0 3px rgba(0,0,0,0.4),
+      inset 0 0 0 1px rgba(255,255,255,0.10);
+  }
+
+  /* Stats */
+  .stats .stat-item {
+    background: none;
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+  }
+  .stats .stat-label,
+  .stats .stat-value {
+    color: #f0f0f0;
+  }
+
+  /* Success/stop overlay readability */
+  .board-overlay { background: rgba(0,0,0,0.65); }
+
+  /* Banner in side panel */
+  .banner {
+    background: rgba(255,255,255,0.06);
+    color: #eaeaea;
+    border-color: rgba(255,255,255,0.08);
+  }
+}
+
+.theme-gray {
+  /* Light neutral gray board & panel */
+  .board {
+    border-color: #bdbdbd;
+    background: none;
+    background-color: #e2e2e2;
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.5),
+      inset 0 -6px 12px rgba(0,0,0,0.12),
+      0 14px 24px rgba(0,0,0,0.15);
+  }
+  .side-panel {
+    border-color: #bdbdbd;
+    background: none;
+    background-color: #ededed;
+    color: #1f1f1f;
+  }
+  /* Side panel content */
+  .side-panel .info-card {
+    background: none;
+    background-color: #f4f4f4;
+    border-color: rgba(0,0,0,0.12);
+    color: #1f1f1f;
+  }
+  .side-panel .info-label,
+  .side-panel .setting-label,
+  .side-panel .stat-label,
+  .side-panel .stat-value {
+    color: #1f1f1f;
+  }
+  .side-panel .wood-select,
+  .side-panel .btn-sm {
+    @include themed-surface(#bdbdbd, #1f1f1f,
+      0 2px 8px rgba(0,0,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.65)
+    );
+    background: none;
+    background-color: #f4f4f4;
+  }
+  .side-panel .wood-select:focus { color: #000000; }
+  .side-panel .wood-select option { color: #000000; background-color: #ffffff; }
+  .side-panel .actions .btn-row button,
+  .side-panel button {
+    @include themed-surface(#bdbdbd, #1f1f1f,
+      0 2px 8px rgba(0,0,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.65)
+    );
+    background: none;
+    background-color: #f4f4f4;
+  }
+  /* Bottom actions row (outside side panel) */
+  .panel-section.actions .btn-row button {
+    @include themed-surface(#bdbdbd, #1f1f1f,
+      0 2px 8px rgba(0,0,0,0.12),
+      inset 0 0 0 1px rgba(255,255,255,0.65)
+    );
+    background: none;
+    background-color: #f4f4f4;
+  }
+  /* Gray tiles */
+  .tile {
+    background: none;
+    background-color: #f0f0f0;
+    color: #1f1f1f;
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.10),
+      inset 0 0 0 1px rgba(255,255,255,0.7);
+  }
+  .tile:not(.empty):hover { filter: brightness(1.04); }
+
+  /* Stats */
+  .stats .stat-item {
+    background: none;
+    background-color: #f0f0f0;
+    color: #1f1f1f;
+  }
+  .stats .stat-label,
+  .stats .stat-value { color: #1f1f1f; }
+
+  /* Banner in side panel */
+  .banner {
+    background: rgba(0,0,0,0.04);
+    color: #1f1f1f;
+    border-color: rgba(0,0,0,0.10);
+  }
+}
+
 .board-overlay {
   position: absolute;
   inset: 8px;

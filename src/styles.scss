@@ -12,6 +12,21 @@
 	--parchment: #f7f3e8;
 }
 
+/* Global page background variants via body[data-theme] */
+body[data-theme="dark"] {
+	/* Neutral dark */
+	--bg-deep: #121212;
+	--bg-accent: #1f1f1f;
+	--parchment: #eaeaea;
+}
+
+body[data-theme="gray"] {
+	/* Neutral light */
+	--bg-deep: #f2f2f2;
+	--bg-accent: #e2e2e2;
+	--parchment: #1f1f1f;
+}
+
 /* Page background: subtle felt with soft vignettes */
 html, body {
 	height: 100%;
