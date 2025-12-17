@@ -49,6 +49,31 @@
   flex-wrap: wrap;
 }
 
+/* Mobile-only stats above the board */
+.mobile-stats { display: none; }
+@media (max-width: 767px) {
+  .mobile-stats {
+    display: flex;
+    /* Match board width and centering */
+    width: 100%;
+    max-width: min(100%, calc(100dvh - var(--v-chrome)), 100vw - 24px);
+    margin-inline: auto;
+    gap: 8px;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  /* Ensure pills fit in a single row on small screens */
+  .mobile-stats .stat-item {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  /* Hide duplicate Moves/Time cards in side panel on small screens */
+  .side-panel .info-card.moves-card,
+  .side-panel .info-card.time-card {
+    display: none;
+  }
+}
+
 .actions {
   display: flex;
   justify-content: center;

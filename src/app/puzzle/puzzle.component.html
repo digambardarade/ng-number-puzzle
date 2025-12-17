@@ -5,6 +5,17 @@
 
   <div class="content" mt-5>
     <div class="left">
+      <!-- Mobile-only compact stats above the board -->
+      <div class="stats mobile-stats" aria-label="Current moves and time">
+        <div class="stat-item" aria-live="polite">
+          <span class="stat-label">Moves</span>
+          <span class="stat-value">{{ moveCount }}</span>
+        </div>
+        <div class="stat-item" aria-live="polite">
+          <span class="stat-label">Time</span>
+          <span class="stat-value monospace">{{ formatTime(elapsedMs) }}</span>
+        </div>
+      </div>
       <div
         class="board"
         [ngStyle]="dimensionStyle"
@@ -98,11 +109,11 @@
               </button>
             </div>
           </div>
-          <div class="info-card">
+          <div class="info-card moves-card">
             <div class="info-label">Moves</div>
             <div class="info-value stat-value">{{ moveCount }}</div>
           </div>
-          <div class="info-card">
+          <div class="info-card time-card">
             <div class="info-label">Time</div>
             <div class="info-value stat-value monospace">
               {{ formatTime(elapsedMs) }}
